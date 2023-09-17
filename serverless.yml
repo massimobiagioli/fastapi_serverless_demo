@@ -1,0 +1,27 @@
+service: fastapi-serverless-demo
+package:
+  individually: true
+provider:
+  name: aws
+  stage: ${opt:stage, "dev"}
+  runtime: python3.9
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    usePoetry: true
+
+functions:
+  app:
+    handler: fastapi_serverless_demo.lambda.handler
+    events:
+      - http:
+          method: get
+          path: /
+      - http:
+          method: any
+          path: /{proxy+}
